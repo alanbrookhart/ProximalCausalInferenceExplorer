@@ -57,13 +57,13 @@ ui <- page_fluid(
     tags$h2(class = "headwater-title", "Proximal Causal Inference Explorer")
   ),
   layout_sidebar(
-    sidebar = sidebar(width = 350, bg = HEADWATER$pedestal, sidebar_controls()),
+    sidebar = sidebar(width = 350, sidebar_controls()),
+    ggiraph::girafeOutput("dag", height = "320px"),
+    uiOutput("dag_legend"),
     navset_tab(
       nav_panel("About", uiOutput("about")),
       nav_panel(
         "Snapshot",
-        ggiraph::girafeOutput("dag", height = "320px"),
-        uiOutput("dag_legend"),
         ggiraph::girafeOutput("snapshot_plot", height = "300px"),
         DT::DTOutput("metrics_table")
       ),
