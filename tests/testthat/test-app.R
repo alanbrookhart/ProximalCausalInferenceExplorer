@@ -13,3 +13,11 @@ test_that("server assembles params and runs a small Monte Carlo", {
     expect_equal(nrow(mc()$metrics), 5)
   })
 })
+
+test_that("SWEEP_CHOICES includes n alongside the parameter labels", {
+  source(file.path("..", "..", "app.R"), local = TRUE)
+  expect_true("n" %in% names(SWEEP_CHOICES))
+  for (k in names(PARAM_LABELS)) {
+    expect_true(k %in% names(SWEEP_CHOICES), info = k)
+  }
+})

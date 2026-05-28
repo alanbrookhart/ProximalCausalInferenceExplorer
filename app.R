@@ -16,6 +16,8 @@ PARAM_LABELS <- c(
   a_xu    = "a_xu — X→U"
 )
 
+SWEEP_CHOICES <- c(PARAM_LABELS, n = "n — sample size")
+
 sidebar_controls <- function() {
   dp <- default_params()
   tagList(
@@ -70,7 +72,7 @@ ui <- page_fluid(
         layout_columns(
           col_widths = c(4, 2, 2, 2, 2),
           selectInput("sweep_var", "Sweep which association?",
-                      choices = stats::setNames(names(PARAM_LABELS), PARAM_LABELS),
+                      choices = stats::setNames(names(SWEEP_CHOICES), SWEEP_CHOICES),
                       selected = "delta"),
           numericInput("sweep_min", "min", value = 0, step = 0.1),
           numericInput("sweep_max", "max", value = 3, step = 0.1),
@@ -103,6 +105,15 @@ server <- function(input, output, session) {
     })
   })
 
+  # Give sensible defaults when the user sweeps over n (sample size).
+  observeEvent(input$sweep_var, {
+    if (isTRUE(input$sweep_var == "n")) {
+      updateNumericInput(session, "sweep_min", value = 200)
+      updateNumericInput(session, "sweep_max", value = 4000)
+      updateNumericInput(session, "sweep_k",   value = 8)
+    }
+  })
+
   output$dag <- renderPlot(render_dag(params()))
   output$dag_legend <- renderUI(HTML(dag_legend_html()))
 
@@ -133,6 +144,7 @@ server <- function(input, output, session) {
 
   sweep_res <- eventReactive(input$run_sweep, {
     grid <- seq(input$sweep_min, input$sweep_max, length.out = input$sweep_k)
+    if (input$sweep_var == "n") grid <- round(grid)
     withProgress(message = "Running sweep...", value = 0.5, {
       run_sweep(params(), input$sweep_var, grid, n = input$n, M_sweep = 400, seed = 1)
     })
