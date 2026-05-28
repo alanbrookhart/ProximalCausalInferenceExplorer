@@ -3,8 +3,9 @@ h1, h2, h3, h4, h5, .headwater-title, .nav-link {
 }
 .headwater-header {
   display: flex; align-items: center; gap: 14px;
+  background-color: #73F0E9;
   border-bottom: 3px solid #0888A8;
-  padding-bottom: 10px; margin-bottom: 16px;
+  padding: 12px 18px; margin-bottom: 16px; border-radius: 6px;
 }
 .headwater-header img { height: 46px; }
 .headwater-title { color: #140298; margin: 0; }

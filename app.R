@@ -57,7 +57,7 @@ ui <- page_fluid(
     tags$h2(class = "headwater-title", "Proximal Causal Inference Explorer")
   ),
   layout_sidebar(
-    sidebar = sidebar(width = 350, bg = HEADWATER$coral, sidebar_controls()),
+    sidebar = sidebar(width = 350, bg = HEADWATER$pedestal, sidebar_controls()),
     navset_tab(
       nav_panel("About", uiOutput("about")),
       nav_panel(
