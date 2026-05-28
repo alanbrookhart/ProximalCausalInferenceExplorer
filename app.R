@@ -57,14 +57,14 @@ ui <- page_fluid(
     tags$h2(class = "headwater-title", "Proximal Causal Inference Explorer")
   ),
   layout_sidebar(
-    sidebar = sidebar(width = 350, sidebar_controls()),
+    sidebar = sidebar(width = 350, bg = HEADWATER$coral, sidebar_controls()),
     navset_tab(
       nav_panel("About", uiOutput("about")),
       nav_panel(
         "Snapshot",
-        plotOutput("dag", height = "320px"),
+        ggiraph::girafeOutput("dag", height = "320px"),
         uiOutput("dag_legend"),
-        plotOutput("snapshot_plot", height = "300px"),
+        ggiraph::girafeOutput("snapshot_plot", height = "300px"),
         DT::DTOutput("metrics_table")
       ),
       nav_panel(
@@ -80,7 +80,7 @@ ui <- page_fluid(
           radioButtons("sweep_metric", "2nd panel", c("ESE" = "ese", "RMSE" = "rmse"))
         ),
         actionButton("run_sweep", "Run sweep", class = "btn btn-primary mb-3"),
-        plotOutput("sweep_plot", height = "470px")
+        ggiraph::girafeOutput("sweep_plot", height = "470px")
       ),
       nav_panel("Methods & formulas", withMathJax(uiOutput("methods")))
     )
@@ -114,7 +114,21 @@ server <- function(input, output, session) {
     }
   })
 
-  output$dag <- renderPlot(render_dag(params()))
+  # Interactive plots via ggiraph: girafe() wraps the ggplot into an htmlwidget
+  # with hover tooltips and cross-plot highlighting (data_id maps to estimator
+  # in the result plots and to edge param / node name in the DAG).
+  .girafe_opts <- list(
+    ggiraph::opts_tooltip(opacity = 0.95, css = "background:#ffffff;color:#140298;padding:6px 8px;border:1px solid #0888A8;border-radius:4px;font-size:12px;"),
+    ggiraph::opts_hover(css = "stroke-width:3px;"),
+    ggiraph::opts_hover_inv(css = "opacity:0.25;"),
+    ggiraph::opts_toolbar(saveaspng = FALSE)
+  )
+
+  output$dag <- ggiraph::renderGirafe(
+    ggiraph::girafe(ggobj = render_dag(params()),
+                    width_svg = 8, height_svg = 4.5,
+                    options = .girafe_opts)
+  )
   output$dag_legend <- renderUI(HTML(dag_legend_html()))
 
   mc <- eventReactive(input$run, {
@@ -123,7 +137,12 @@ server <- function(input, output, session) {
     })
   })
 
-  output$snapshot_plot <- renderPlot({ req(mc()); plot_snapshot(mc()) })
+  output$snapshot_plot <- ggiraph::renderGirafe({
+    req(mc())
+    ggiraph::girafe(ggobj = plot_snapshot(mc()),
+                    width_svg = 8, height_svg = 4,
+                    options = .girafe_opts)
+  })
 
   output$metrics_table <- DT::renderDT({
     req(mc())
@@ -150,9 +169,13 @@ server <- function(input, output, session) {
     })
   })
 
-  output$sweep_plot <- renderPlot({
+  output$sweep_plot <- ggiraph::renderGirafe({
     req(sweep_res())
-    plot_sweep(sweep_res(), input$sweep_var, metric = input$sweep_metric)
+    ggiraph::girafe(
+      ggobj = plot_sweep(sweep_res(), input$sweep_var, metric = input$sweep_metric),
+      width_svg = 8, height_svg = 6,
+      options = .girafe_opts
+    )
   })
 
   output$about <- renderUI(includeMarkdown("www/about.md"))

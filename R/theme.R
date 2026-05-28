@@ -3,7 +3,9 @@ HEADWATER <- list(
   pedestal = "#73F0E9", aqua = "#0FB5D2", ocean = "#0888A8",
   azure = "#4166FF", navy = "#140298", pearl = "#F0F0F0",
   silver = "#ADADAD", graphite = "#575757",
-  orange = "#FD8524", crimson = "#A5052D", forest = "#495102"
+  orange = "#FD8524", crimson = "#A5052D", forest = "#495102",
+  # Coral used for the side panel background.
+  coral = "#FFAB91"
 )
 
 # One color per estimator, reused across plots and the metrics table.

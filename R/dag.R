@@ -1,5 +1,16 @@
-# Render the proximal-CI DAG as a ggplot. Edge linewidth is proportional to
-# |coefficient|; color encodes edge type; residual/invalid edges are dashed.
+# Render the proximal-CI DAG as a ggplot (using ggiraph interactive geoms so it
+# can be wrapped with ggiraph::girafe() for hover tooltips in the Shiny app).
+# Edge linewidth is proportional to |coefficient|; color encodes edge type;
+# residual/invalid edges are dashed.
+.NODE_ROLE <- c(
+  U = "unmeasured confounder",
+  X = "measured confounder",
+  Z = "treatment proxy",
+  W = "outcome proxy",
+  A = "treatment",
+  Y = "outcome"
+)
+
 render_dag <- function(params) {
   nodes <- data.frame(
     name = c("U", "X", "Z", "W", "A", "Y"),
@@ -38,32 +49,45 @@ render_dag <- function(params) {
 
   edges$lw  <- 0.4 + 1.8 * pmin(abs(edges$coef), 3) / 3
   edges$lty <- ifelse(edges$type %in% c("residual", "invalid"), "dashed", "solid")
-  edges$col <- EDGE_COLORS[edges$type]
+  edges$col <- unname(EDGE_COLORS[edges$type])
   edges$mx  <- (edges$x + edges$xend) / 2
   edges$my  <- (edges$y + edges$yend) / 2
+  edges$tooltip <- sprintf("%s &nbsp;%s &rarr; %s &nbsp;coef = %.2g &nbsp;(%s)",
+                           edges$param, edges$from, edges$to, edges$coef, edges$type)
 
   nodes$fill   <- ifelse(nodes$latent, "#F2F2F2", "#D8F3F9")
   nodes$stroke <- ifelse(nodes$latent, HEADWATER$graphite, HEADWATER$ocean)
+  nodes$tooltip <- sprintf("%s &mdash; %s%s", nodes$name,
+                           .NODE_ROLE[nodes$name],
+                           ifelse(nodes$latent, " (unmeasured)", ""))
 
   ggplot2::ggplot() +
-    ggplot2::geom_segment(
+    ggiraph::geom_segment_interactive(
       data = edges,
-      ggplot2::aes(x = x, y = y, xend = xend, yend = yend),
-      arrow = ggplot2::arrow(length = grid::unit(0.18, "cm"), type = "closed"),
-      linewidth = edges$lw, colour = edges$col, linetype = edges$lty
+      ggplot2::aes(x = x, y = y, xend = xend, yend = yend,
+                   linewidth = lw, colour = col, linetype = lty,
+                   tooltip = tooltip, data_id = param),
+      arrow = ggplot2::arrow(length = grid::unit(0.18, "cm"), type = "closed")
     ) +
     ggplot2::geom_text(
-      data = edges, ggplot2::aes(x = mx, y = my, label = sprintf("%.2g", coef)),
-      colour = edges$col, fontface = "bold", size = 3.1, vjust = -0.4
+      data = edges, ggplot2::aes(x = mx, y = my, label = sprintf("%.2g", coef),
+                                 colour = col),
+      fontface = "bold", size = 3.1, vjust = -0.4
     ) +
-    ggplot2::geom_point(
-      data = nodes, ggplot2::aes(x = x, y = y),
-      size = 17, shape = 21, fill = nodes$fill, colour = nodes$stroke, stroke = 1.3
+    ggiraph::geom_point_interactive(
+      data = nodes,
+      ggplot2::aes(x = x, y = y, fill = fill, colour = stroke,
+                   tooltip = tooltip, data_id = name),
+      size = 17, shape = 21, stroke = 1.3
     ) +
     ggplot2::geom_text(
       data = nodes, ggplot2::aes(x = x, y = y, label = name),
       fontface = "bold", size = 5, colour = HEADWATER$graphite
     ) +
+    ggplot2::scale_colour_identity() +
+    ggplot2::scale_fill_identity() +
+    ggplot2::scale_linewidth_identity() +
+    ggplot2::scale_linetype_identity() +
     ggplot2::coord_equal(clip = "off") +
     ggplot2::scale_x_continuous(limits = c(0.2, 7.8), expand = c(0, 0)) +
     ggplot2::scale_y_continuous(limits = c(-0.2, 5.6), expand = c(0, 0)) +
