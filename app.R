@@ -156,7 +156,10 @@ server <- function(input, output, session) {
   })
 
   output$about <- renderUI(includeMarkdown("www/about.md"))
-  output$methods <- renderUI(HTML(methods_html()))
+  # withMathJax() inside renderUI() triggers MathJax to re-typeset the
+  # dynamically inserted content; the UI-level withMathJax() only loads the
+  # script and does not re-typeset on update.
+  output$methods <- renderUI(withMathJax(HTML(methods_html())))
 }
 
 shinyApp(ui, server)
