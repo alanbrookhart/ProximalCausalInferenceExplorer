@@ -4,3 +4,5 @@
 .Ruserdata
 .superpowers/
 .DS_Store
+renv/library/
+renv/staging/
