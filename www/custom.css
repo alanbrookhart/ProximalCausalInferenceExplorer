@@ -1,0 +1,15 @@
+h1, h2, h3, h4, h5, .headwater-title, .nav-link {
+  font-family: Georgia, "Times New Roman", serif;
+}
+.headwater-header {
+  display: flex; align-items: center; gap: 14px;
+  border-bottom: 3px solid #0888A8;
+  padding-bottom: 10px; margin-bottom: 16px;
+}
+.headwater-header img { height: 46px; }
+.headwater-title { color: #140298; margin: 0; }
+.dag-legend { font-size: 12px; color: #575757; margin: 4px 0 10px; }
+.dag-legend span { margin-right: 16px; white-space: nowrap; }
+.dag-legend i { display: inline-block; width: 20px; height: 3px;
+  vertical-align: middle; margin-right: 5px; }
+.btn-outline-primary { --bs-btn-color: #0888A8; --bs-btn-border-color: #0888A8; }
