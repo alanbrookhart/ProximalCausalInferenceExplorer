@@ -1,15 +1,163 @@
-h1, h2, h3, h4, h5, .headwater-title, .nav-link {
-  font-family: Georgia, "Times New Roman", serif;
+/* ============================================================================
+   Proximal Causal Inference Explorer — page chrome theme.
+   Palette: navy #003366 · sidebar #001A57 · steel #4682B4 · gold #C99700.
+   Targets bslib (Bootstrap 5) classes: page_fluid / layout_sidebar / navset_tab.
+   ========================================================================== */
+
+/* ---- Font stack ---------------------------------------------------------- */
+body, h1, h2, h3, h4, h5, h6, p, li, label,
+.control-label, .nav-link, .form-label {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+               "Helvetica Neue", Arial, sans-serif;
 }
-.headwater-header {
-  display: flex; align-items: center; gap: 14px;
-  border-bottom: 3px solid #0888A8;
-  padding-bottom: 10px; margin-bottom: 16px;
+
+/* ---- Header bar ---------------------------------------------------------- */
+.app-header {
+  background-color: #003366;
+  text-align: center;
+  padding: 18px 15px;
+  margin: 0 0 16px 0;
 }
-.headwater-header img { height: 46px; }
-.headwater-title { color: #140298; margin: 0; }
+.app-title {
+  color: #ffffff;
+  font-weight: bold;
+  margin: 0;
+}
+
+/* ---- Headings ------------------------------------------------------------ */
+h3, h4 { color: #003366; font-weight: 600; }
+
+/* ---- Sidebar ------------------------------------------------------------- */
+.bslib-sidebar-layout > .sidebar {
+  --bslib-sidebar-bg: #001A57;
+  background-color: #001A57 !important;
+}
+.bslib-sidebar-layout > .sidebar,
+.bslib-sidebar-layout > .sidebar .control-label,
+.bslib-sidebar-layout > .sidebar label,
+.bslib-sidebar-layout > .sidebar .form-label,
+.bslib-sidebar-layout > .sidebar h5,
+.bslib-sidebar-layout > .sidebar h6,
+.bslib-sidebar-layout > .sidebar .fw-bold,
+.bslib-sidebar-layout > .sidebar summary {
+  color: #ffffff !important;
+}
+.bslib-sidebar-layout > .sidebar hr {
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+}
+/* Form inputs in the sidebar stay light for contrast */
+.bslib-sidebar-layout > .sidebar input[type="number"],
+.bslib-sidebar-layout > .sidebar input[type="text"],
+.bslib-sidebar-layout > .sidebar select,
+.bslib-sidebar-layout > .sidebar .form-control,
+.bslib-sidebar-layout > .sidebar .selectize-input {
+  background-color: #ffffff;
+  color: #333333;
+  border: 1px solid #ccc;
+}
+/* Slider (ion.rangeSlider) legibility on the dark sidebar */
+.bslib-sidebar-layout > .sidebar .irs--shiny .irs-bar,
+.bslib-sidebar-layout > .sidebar .irs--shiny .irs-single,
+.bslib-sidebar-layout > .sidebar .irs--shiny .irs-from,
+.bslib-sidebar-layout > .sidebar .irs--shiny .irs-to {
+  background-color: #4682B4;
+}
+.bslib-sidebar-layout > .sidebar .irs--shiny .irs-min,
+.bslib-sidebar-layout > .sidebar .irs--shiny .irs-max,
+.bslib-sidebar-layout > .sidebar .irs--shiny .irs-grid-text {
+  color: #e6ecf5;
+  background-color: transparent;
+}
+.bslib-sidebar-layout > .sidebar .irs--shiny .irs-line {
+  background-color: rgba(255, 255, 255, 0.35);
+}
+
+/* ---- Main content area --------------------------------------------------- */
+.bslib-sidebar-layout > .main {
+  background-color: #f8f9fa;
+}
+
+/* ---- Tabs ---------------------------------------------------------------- */
+/* !important is needed so these win over bslib's Bootstrap theme, which is
+   injected after this stylesheet. */
+.nav-tabs { border-bottom: 2px solid #003366 !important; }
+.nav-tabs .nav-link {
+  color: #003366 !important;
+  background-color: #e0e0e0 !important;
+  border: none !important;
+  margin-right: 2px;
+  font-weight: 500;
+}
+.nav-tabs .nav-link:hover { background-color: #ccc !important; }
+.nav-tabs .nav-link.active,
+.nav-tabs .nav-link.active:hover,
+.nav-tabs .nav-link.active:focus {
+  color: #ffffff !important;
+  background-color: #4682B4 !important;
+  border: none !important;
+}
+
+/* Tab content sits in a white card with a soft shadow over the gray page. */
+.tab-content {
+  background-color: #ffffff;
+  padding: 25px;
+  border-radius: 0 5px 5px 5px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* ---- Buttons ------------------------------------------------------------- */
+.btn-primary {
+  background-color: #C99700;
+  border-color: #C99700;
+  color: #ffffff;
+  font-weight: 500;
+}
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active {
+  background-color: #A67600 !important;
+  border-color: #A67600 !important;
+  color: #ffffff !important;
+}
+.btn-outline-primary {
+  --bs-btn-color: #4682B4;
+  --bs-btn-border-color: #4682B4;
+  --bs-btn-hover-bg: #4682B4;
+  --bs-btn-hover-border-color: #4682B4;
+  --bs-btn-active-bg: #4682B4;
+  --bs-btn-active-border-color: #4682B4;
+}
+
+/* ---- Links --------------------------------------------------------------- */
+a { color: #4682B4; }
+a:hover { color: #003366; }
+
+/* ---- Section cards (available to About / Methods content) ---------------- */
+.math-section {
+  background-color: #f8f9fa;
+  padding: 20px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  border-left: 4px solid #4682B4;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+.math-section h3 { color: #003366; font-weight: 600; margin-top: 0; }
+.sim-controls {
+  background-color: #f0f7ff;
+  padding: 20px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  border-left: 4px solid #C99700;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* ---- Tables -------------------------------------------------------------- */
+.dataTable thead { background-color: #003366; color: #ffffff; }
+
+/* ---- DAG legend ---------------------------------------------------------- */
 .dag-legend { font-size: 12px; color: #575757; margin: 4px 0 10px; }
 .dag-legend span { margin-right: 16px; white-space: nowrap; }
-.dag-legend i { display: inline-block; width: 20px; height: 3px;
-  vertical-align: middle; margin-right: 5px; }
-.btn-outline-primary { --bs-btn-color: #0888A8; --bs-btn-border-color: #0888A8; }
+.dag-legend i {
+  display: inline-block; width: 20px; height: 3px;
+  vertical-align: middle; margin-right: 5px;
+}

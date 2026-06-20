@@ -1,7 +1,23 @@
-# Render the proximal-CI DAG as a ggplot (using ggiraph interactive geoms so it
-# can be wrapped with ggiraph::girafe() for hover tooltips in the Shiny app).
-# Edge linewidth is proportional to |coefficient|; color encodes edge type;
-# residual/invalid edges are dashed.
+# ==============================================================================
+# Script: R/dag.R
+# Author: Alan Brookhart (alan.brookhart@duke.edu)
+# Date: June 2026
+# Version: 1.0.0
+#
+# Description:
+#   Builds the proximal-causal-inference DAG as an interactive ggplot. Nodes are
+#   the variables (U, X, Z, W, A, Y) and edges are the structural coefficients of
+#   the data-generating process; edge width encodes |coefficient|, color encodes
+#   edge type (via EDGE_COLORS), and residual/invalid edges are dashed.
+#
+# Core Architecture:
+#   - render_dag(params): returns a ggplot using ggiraph interactive geoms so it
+#     can be wrapped with ggiraph::girafe() for hover tooltips in the Shiny app.
+#   - Depends on EDGE_COLORS / PALETTE from R/theme.R.
+#
+# Usage:
+#   Sourced automatically by Shiny at runtime; not run directly.
+# ==============================================================================
 .NODE_ROLE <- c(
   U = "unmeasured confounder",
   X = "measured confounder",
@@ -55,8 +71,8 @@ render_dag <- function(params) {
   edges$tooltip <- sprintf("%s &nbsp;%s &rarr; %s &nbsp;coef = %.2g &nbsp;(%s)",
                            edges$param, edges$from, edges$to, edges$coef, edges$type)
 
-  nodes$fill   <- ifelse(nodes$latent, "#F2F2F2", "#D8F3F9")
-  nodes$stroke <- ifelse(nodes$latent, HEADWATER$graphite, HEADWATER$ocean)
+  nodes$fill   <- ifelse(nodes$latent, "#F2F2F2", "#DCE6F1")
+  nodes$stroke <- ifelse(nodes$latent, PALETTE$graphite, PALETTE$steel)
   nodes$tooltip <- sprintf("%s &mdash; %s%s", nodes$name,
                            .NODE_ROLE[nodes$name],
                            ifelse(nodes$latent, " (unmeasured)", ""))
@@ -82,7 +98,7 @@ render_dag <- function(params) {
     ) +
     ggplot2::geom_text(
       data = nodes, ggplot2::aes(x = x, y = y, label = name),
-      fontface = "bold", size = 5, colour = HEADWATER$graphite
+      fontface = "bold", size = 5, colour = PALETTE$graphite
     ) +
     ggplot2::scale_colour_identity() +
     ggplot2::scale_fill_identity() +

@@ -1,3 +1,27 @@
+# ==============================================================================
+# Script: R/estimators.R
+# Author: Alan Brookhart (alan.brookhart@duke.edu)
+# Date: June 2026
+# Version: 1.0.0
+#
+# Description:
+#   The estimators compared in the app, each returning the estimated average
+#   causal effect of A on Y and its standard error. Includes proximal
+#   g-computation (two-stage least squares with Z instrumenting W) and the
+#   crude, standard (minimal/full), and oracle ordinary-least-squares
+#   comparators.
+#
+# Core Architecture:
+#   - .coef_se(model, term): pull an estimate and SE from a fitted model.
+#   - fit_crude / fit_standard_minimal / fit_standard_full / fit_oracle /
+#     fit_proximal: the individual estimators.
+#   - fit_all(data): run every estimator and return a tidy tibble.
+#   - Depends on the ivreg package for the proximal estimator.
+#
+# Usage:
+#   Sourced automatically by Shiny at runtime; not run directly.
+# ==============================================================================
+
 # Extract the coefficient and standard error for one term from a fitted model.
 .coef_se <- function(model, term) {
   co <- summary(model)$coefficients

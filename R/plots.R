@@ -1,3 +1,25 @@
+# ==============================================================================
+# Script: R/plots.R
+# Author: Alan Brookhart (alan.brookhart@duke.edu)
+# Date: June 2026
+# Version: 1.0.0
+#
+# Description:
+#   ggplot builders for the simulation result views. Produces the Snapshot plot
+#   (overlaid sampling distributions of the estimators) and the Sweep plot (bias
+#   and ESE/RMSE versus a swept parameter). All geoms are ggiraph-interactive for
+#   hover tooltips and cross-plot highlighting in the Shiny app.
+#
+# Core Architecture:
+#   - plot_snapshot(mc): density curves of per-replicate estimates by estimator.
+#   - plot_sweep(sweep_df, sweep_var, metric): two stacked panels (bias, then
+#     ESE or RMSE) versus the swept value, one line per estimator.
+#   - Depends on ESTIMATOR_COLORS / PALETTE and headwater_ggtheme() (R/theme.R).
+#
+# Usage:
+#   Sourced automatically by Shiny at runtime; not run directly.
+# ==============================================================================
+
 # Overlaid sampling distributions of the per-replicate estimates, one curve per
 # estimator, with a dashed line at the true effect. Uses ggiraph's interactive
 # density so the Shiny app can show per-curve tooltips on hover.
@@ -10,9 +32,9 @@ plot_snapshot <- function(mc) {
       alpha = 0.12, linewidth = 0.9
     ) +
     ggplot2::geom_vline(xintercept = mc$truth, linetype = "dashed",
-                        colour = HEADWATER$graphite) +
+                        colour = PALETTE$graphite) +
     ggplot2::annotate("text", x = mc$truth, y = Inf, label = "true τ",
-                      vjust = 1.4, hjust = -0.1, colour = HEADWATER$graphite, size = 3.6) +
+                      vjust = 1.4, hjust = -0.1, colour = PALETTE$graphite, size = 3.6) +
     ggplot2::scale_colour_manual(values = ESTIMATOR_COLORS, drop = FALSE) +
     ggplot2::scale_fill_manual(values = ESTIMATOR_COLORS, drop = FALSE) +
     ggplot2::labs(x = "estimated ACE", y = "density") +
@@ -37,7 +59,7 @@ plot_sweep <- function(sweep_df, sweep_var, metric = c("ese", "rmse")) {
     headwater_ggtheme()
   )
   p_bias <- ggplot2::ggplot(sweep_df, ggplot2::aes(value, bias, colour = estimator)) +
-    ggplot2::geom_hline(yintercept = 0, colour = HEADWATER$silver) +
+    ggplot2::geom_hline(yintercept = 0, colour = PALETTE$gray) +
     ggiraph::geom_line_interactive(
       ggplot2::aes(data_id = estimator), linewidth = 1
     ) +

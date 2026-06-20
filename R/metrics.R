@@ -1,3 +1,22 @@
+# ==============================================================================
+# Script: R/metrics.R
+# Author: Alan Brookhart (alan.brookhart@duke.edu)
+# Date: June 2026
+# Version: 1.0.0
+#
+# Description:
+#   Summarizes per-replicate estimates from the Monte Carlo simulation into the
+#   performance metrics reported in the app: bias, empirical standard error
+#   (ESE), mean estimated SE, SE ratio (SER), root mean squared error (RMSE),
+#   and Wald confidence-interval coverage, computed per estimator.
+#
+# Core Architecture:
+#   - summarise_estimates(estimates, truth, level): one summary row per estimator.
+#
+# Usage:
+#   Sourced automatically by Shiny at runtime; not run directly.
+# ==============================================================================
+
 # Summarize per-replicate estimates into performance metrics, by estimator.
 # `estimates` has columns estimator, estimate, se (one row per rep x estimator).
 summarise_estimates <- function(estimates, truth, level = 0.95) {

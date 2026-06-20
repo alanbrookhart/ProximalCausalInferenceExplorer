@@ -1,3 +1,30 @@
+# ==============================================================================
+# Script: app.R
+# Author: Alan Brookhart (alan.brookhart@duke.edu)
+# Date: June 2026
+# Version: 1.0.0
+#
+# Description:
+#   Main Shiny application for the Proximal Causal Inference Explorer. This
+#   interactive tool demonstrates how proximal causal inference recovers the
+#   average causal effect in the presence of unmeasured confounding, using a
+#   treatment proxy and an outcome proxy, and contrasts it with standard
+#   covariate adjustment.
+#
+# Core Architecture:
+#   - User Interface (UI): bslib fluid page with a sidebar of structural
+#     parameters and scenario presets, plus tabs for the DAG, About, a Monte
+#     Carlo Snapshot, a parameter Sweep, and Methods & formulas.
+#   - Server Logic: reactive engine that runs Monte Carlo simulations and
+#     parameter sweeps on demand and renders interactive ggiraph plots and DT
+#     tables.
+#   - Dependencies: pure-logic helpers in R/*.R (auto-sourced at runtime) for the
+#     data-generating process, estimators, metrics, plots, DAG, and theme.
+#
+# Usage:
+#   Run locally via shiny::runApp() or deploy to a Shiny server.
+# ==============================================================================
+
 library(shiny)
 library(bslib)
 
@@ -50,17 +77,19 @@ sidebar_controls <- function() {
 
 ui <- page_fluid(
   theme = headwater_bs_theme(),
-  tags$head(tags$link(rel = "stylesheet", href = "custom.css")),
+  tags$head(tags$link(rel = "stylesheet", href = "custom.css?v=20260620")),
   tags$div(
-    class = "headwater-header",
-    tags$img(src = "headwater-logo.png", alt = "Headwater Science"),
-    tags$h2(class = "headwater-title", "Proximal Causal Inference Explorer")
+    class = "app-header",
+    tags$h2(class = "app-title", "Proximal Causal Inference Explorer")
   ),
   layout_sidebar(
     sidebar = sidebar(width = 350, sidebar_controls()),
-    ggiraph::girafeOutput("dag", height = "320px"),
-    uiOutput("dag_legend"),
     navset_tab(
+      nav_panel(
+        "DAG",
+        ggiraph::girafeOutput("dag", height = "320px"),
+        uiOutput("dag_legend")
+      ),
       nav_panel("About", uiOutput("about")),
       nav_panel(
         "Snapshot",

@@ -1,3 +1,25 @@
+# ==============================================================================
+# Script: R/dgp.R
+# Author: Alan Brookhart (alan.brookhart@duke.edu)
+# Date: June 2026
+# Version: 1.0.0
+#
+# Description:
+#   Data-generating process for the proximal-causal-inference simulation. Defines
+#   the default structural parameters and simulates one dataset of i.i.d. units
+#   with an unmeasured confounder U, measured confounder X, treatment proxy Z,
+#   outcome proxy W, treatment A, and outcome Y.
+#
+# Core Architecture:
+#   - default_params(): the baseline parameter list (effect sizes, edge
+#     strengths, and noise SDs).
+#   - simulate_data(n, params): draws n units from the structural equations used
+#     throughout the app and described on the Methods tab.
+#
+# Usage:
+#   Sourced automatically by Shiny at runtime; not run directly.
+# ==============================================================================
+
 # Default parameter set. The app opens on "residual confounding" (delta = 1,
 # lambda = 0) so the proximal advantage is visible immediately.
 default_params <- function() {

@@ -1,13 +1,30 @@
-# Small static HTML strings used by the UI. Kept out of app.R so they are
-# testable and the app file stays focused on wiring.
+# ==============================================================================
+# Script: R/ui_text.R
+# Author: Alan Brookhart (alan.brookhart@duke.edu)
+# Date: June 2026
+# Version: 1.0.0
+#
+# Description:
+#   Small static HTML strings used by the UI, kept out of app.R so they are
+#   testable and the app file stays focused on wiring. Provides the DAG color
+#   legend and the MathJax "Methods & formulas" content.
+#
+# Core Architecture:
+#   - dag_legend_html(): the color key for the DAG; colors are kept in sync with
+#     EDGE_COLORS / PALETTE in R/theme.R.
+#   - methods_html(): the formula/methods write-up rendered with MathJax.
+#
+# Usage:
+#   Sourced automatically by Shiny at runtime; not run directly.
+# ==============================================================================
 
 dag_legend_html <- function() {
   paste0(
     "<div class='dag-legend'>",
-    "<span><i style='background:", HEADWATER$navy, "'></i>&tau; — true effect A&rarr;Y</span>",
-    "<span><i style='background:", HEADWATER$ocean, "'></i>structural paths</span>",
-    "<span><i style='background:", HEADWATER$orange, "'></i>&delta; — residual confounding (breaks standard adjustment)</span>",
-    "<span><i style='background:", HEADWATER$crimson, "'></i>&lambda; — proxy invalidity (breaks proximal)</span>",
+    "<span><i style='background:", PALETTE$navy, "'></i>&tau; — true effect A&rarr;Y</span>",
+    "<span><i style='background:", PALETTE$steel, "'></i>structural paths</span>",
+    "<span><i style='background:", PALETTE$gold, "'></i>&delta; — residual confounding (breaks standard adjustment)</span>",
+    "<span><i style='background:", PALETTE$firebrick, "'></i>&lambda; — proxy invalidity (breaks proximal)</span>",
     "</div>"
   )
 }
