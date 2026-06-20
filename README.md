@@ -22,6 +22,4 @@ Rscript -e 'testthat::test_dir("tests/testthat")'
 rsconnect::deployApp(appName = "ProximalCausalInference")
 ```
 
-Files in `R/` are auto-sourced by Shiny. See
-`docs/superpowers/specs/2026-05-27-proximal-ci-shiny-design.md` for the design
-and `docs/superpowers/plans/2026-05-27-proximal-ci-shiny.md` for the build plan.
+Files in `R/` are auto-sourced by Shiny. 
